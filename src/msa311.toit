@@ -102,11 +102,10 @@ class Msa311:
 
     if not RANGE_2G <= range <= RANGE_16G: throw "INVALID_RANGE"
     range_ = range
-    range_bits := range << 4
 
     reg_.write_u8 REG_SOFT_RESET_ 1
     reg_.write_u8 REG_ODR_ odr_bits
-    reg_.write_u8 REG_RANGE_ range_bits
+    reg_.write_u8 REG_RANGE_ range
     reg_.write_u8 REG_POWER_ 0x00
 
   /**
@@ -138,9 +137,9 @@ class Msa311:
     // - RANGE_8G:   256  LSB/g
     // - RANGE_16G:  128  LSB/g
     // Shift the bits down depending on the range.
-    x >>= (3 - range_)
-    y >>= (3 - range_)
-    z >>= (3 - range_)
+    x >>= 3 - range_
+    y >>= 3 - range_
+    z >>= 3 - range_
 
     // Now each variable has 128 LSB/g in the first 12 bits.
     // Divide by 128 for the LSB and divide by 16 to shift the 12 bits to the right.
